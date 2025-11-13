@@ -2,6 +2,7 @@ package com.ranmc.lobby;
 
 import java.util.ArrayList;
 
+import cc.baka9.catseedlogin.bukkit.CatSeedLoginAPI;
 import cc.baka9.catseedlogin.bukkit.event.CatSeedPlayerLoginEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -10,9 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -69,5 +72,15 @@ public class Lobby extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         player.chat("/cd");
         player.setGameMode(GameMode.ADVENTURE);
+    }
+
+    @EventHandler
+    public void onPlayerMoveEvent(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        if (CatSeedLoginAPI.isLogin(player.getName())) {
+            if (player.getOpenInventory().getTopInventory().getType() == InventoryType.CRAFTING) {
+                player.chat("/cd");
+            }
+        }
     }
 }
