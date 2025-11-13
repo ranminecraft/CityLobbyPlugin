@@ -1,0 +1,5 @@
+name: Lobby
+main: com.ranmc.lobby.Lobby
+author: Ranica
+version: 3.0
+api-version: 1.18
