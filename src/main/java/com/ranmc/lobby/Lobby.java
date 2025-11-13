@@ -6,6 +6,7 @@ import cc.baka9.catseedlogin.bukkit.CatSeedLoginAPI;
 import cc.baka9.catseedlogin.bukkit.event.CatSeedPlayerLoginEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -77,10 +78,12 @@ public class Lobby extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (CatSeedLoginAPI.isLogin(player.getName())) {
-            if (player.getOpenInventory().getTopInventory().getType() == InventoryType.CRAFTING) {
-                player.chat("/cd");
-            }
+        Location to = event.getTo();
+        Location from = event.getFrom();
+        if (CatSeedLoginAPI.isLogin(player.getName()) &&
+                (to.getX() != from.getX() || to.getZ() != from.getZ()) &&
+                player.getOpenInventory().getTopInventory().getType() == InventoryType.CRAFTING) {
+            player.chat("/cd");
         }
     }
 }
