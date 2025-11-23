@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import cc.baka9.catseedlogin.bukkit.CatSeedLoginAPI;
 import cc.baka9.catseedlogin.bukkit.event.CatSeedPlayerLoginEvent;
+import cc.baka9.catseedlogin.bukkit.event.CatSeedPlayerRegisterEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -70,6 +71,13 @@ public class Lobby extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onCatSeedPlayerLoginEvent(CatSeedPlayerLoginEvent event) {
+        Player player = event.getPlayer();
+        player.chat("/cd");
+        player.setGameMode(GameMode.ADVENTURE);
+    }
+
+    @EventHandler
+    public void onCatSeedPlayerRegisterEvent(CatSeedPlayerRegisterEvent event) {
         Player player = event.getPlayer();
         player.chat("/cd");
         player.setGameMode(GameMode.ADVENTURE);
