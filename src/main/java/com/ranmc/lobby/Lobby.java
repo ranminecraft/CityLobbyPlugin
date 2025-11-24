@@ -1,10 +1,20 @@
 package com.ranmc.lobby;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cc.baka9.catseedlogin.bukkit.CatSeedLoginAPI;
 import cc.baka9.catseedlogin.bukkit.event.CatSeedPlayerLoginEvent;
 import cc.baka9.catseedlogin.bukkit.event.CatSeedPlayerRegisterEvent;
+import com.viaversion.viaversion.api.Via;
+import io.papermc.paper.dialog.Dialog;
+import io.papermc.paper.registry.data.dialog.ActionButton;
+import io.papermc.paper.registry.data.dialog.DialogBase;
+import io.papermc.paper.registry.data.dialog.action.DialogAction;
+import io.papermc.paper.registry.data.dialog.input.DialogInput;
+import io.papermc.paper.registry.data.dialog.type.DialogType;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickCallback;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -47,6 +57,41 @@ public class Lobby extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         player.getInventory().setItem(4, item.clone());
 		player.setGameMode(GameMode.SPECTATOR);
+        if (Via.getAPI().getPlayerVersion(player) >= 771) {
+            if (CatSeedLoginAPI.isRegister(player.getName())) {
+                player.showDialog(Dialog.create(builder -> builder
+                        .empty()
+                        .base(DialogBase.builder(Component.text("登陆账号 : " + player.getName()))
+                                .canCloseWithEscape(false)
+                                .inputs(List.of(
+                                        DialogInput.text("password", Component.text("登陆密码")).build()
+                                )).build()
+                        )
+                        .type(DialogType.notice(ActionButton.builder(Component.text("确认"))
+                                .action(DialogAction.customClick((response, audience) -> {
+                                    String pwd = response.getText("password");
+                                    player.chat("/l " + pwd);
+                                }, ClickCallback.Options.builder().lifetime(ClickCallback.DEFAULT_LIFETIME).build())).build()
+                        ))));
+            } else {
+                player.showDialog(Dialog.create(builder -> builder
+                        .empty()
+                        .base(DialogBase.builder(Component.text("注册账号 : " + player.getName()))
+                                .canCloseWithEscape(false)
+                                .inputs(List.of(
+                                        DialogInput.text("password", Component.text("密码")).build(),
+                                        DialogInput.text("password2", Component.text("重复密码")).build()
+                                )).build()
+                        )
+                        .type(DialogType.notice(ActionButton.builder(Component.text("确认"))
+                                .action(DialogAction.customClick((response, audience) -> {
+                                    String pwd = response.getText("password");
+                                    String pwd2 = response.getText("password2");
+                                    player.chat("/reg " + pwd + " " + pwd2);
+                                }, ClickCallback.Options.builder().lifetime(ClickCallback.DEFAULT_LIFETIME).build())).build()
+                        ))));
+            }
+        }
 	}
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
