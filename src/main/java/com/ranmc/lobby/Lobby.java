@@ -97,7 +97,7 @@ public class Lobby extends JavaPlugin implements Listener {
             if (!CatSeedLoginAPI.isLogin(player.getName())) {
                 sendDialog(player);
             }
-        }, 10);
+        }, 20);
     }
 
 	@EventHandler
