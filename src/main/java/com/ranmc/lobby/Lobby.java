@@ -94,7 +94,9 @@ public class Lobby extends JavaPlugin implements Listener {
     public void onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
         Bukkit.getScheduler().runTaskLater(this, () -> {
-            if (!CatSeedLoginAPI.isLogin(player.getName())) {
+            if (CatSeedLoginAPI.isLogin(player.getName())) {
+                player.closeDialog();
+            } else {
                 sendDialog(player);
             }
         }, 20);
